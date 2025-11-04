@@ -1,0 +1,153 @@
+// ==UserScript==
+// @name          Work.ink bypass(by kxBypass)
+// @description   Work.ink bypass [semi] FULLY!
+// @namespace     https://discord.gg/pqEBSTqdxV
+// @version       2.8
+// @match         https://*.work.ink/*
+// @grant         none
+// @run-at        document-end
+// @icon          https://i.pinimg.com/736x/aa/2a/e5/aa2ae567da2c40ac6834a44abbb9e9ff.jpg
+// @downloadURL https://update.greasyfork.org/scripts/554796/Workink%20bypass%28by%20kxBypass%29.user.js
+// @updateURL https://update.greasyfork.org/scripts/554796/Workink%20bypass%28by%20kxBypass%29.meta.js
+// ==/UserScript==
+
+(function () {
+    'use strict';
+
+    if (document.title === 'Just a moment...') return;
+
+
+    function displayCustomMessage() {
+
+        if (document.getElementById('bypass-message')) return;
+
+
+        if (!window.location.href.includes("work.ink")) return;
+
+        const messageBox = document.createElement('div');
+        messageBox.id = 'bypass-message';
+        messageBox.innerHTML = `
+            <p style="
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 5px;
+                color: #fff;
+            ">
+                NOTICE:
+            </p>
+            <p style="
+                font-size: 24px;
+                font-weight: 900;
+                color: #fff;
+                letter-spacing: 1px;
+                text-shadow: 1px 1px 2px #000;
+            ">
+                If it moves you up go down to the button go to destination and press again
+            </p>
+        `;
+        messageBox.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #008080;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 999999;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            border: 2px solid #fff;
+            transition: opacity 0.5s ease-in-out;
+        `;
+
+        document.body.appendChild(messageBox);
+
+        setTimeout(() => {
+            messageBox.style.opacity = '0';
+            setTimeout(() => messageBox.remove(), 500);
+        }, 100000);
+    }
+    // ------------------------------------------
+
+
+    if (window.location.href.includes("work.ink")) {
+
+        displayCustomMessage();
+
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+        console.log("If you read this you good boy😁");
+
+        const repeatSelectors = [
+            '.button-box .accessBtn',
+            'button.closelabel'
+        ];
+
+        let skipClickCount = 0;
+        let accessIsolated = false;
+
+        const interval = setInterval(() => {
+
+            const checkpointNode = document.querySelector('div.fixed.top-16.left-0.right-0.bottom-0.bg-white.z-40.overflow-y-auto');
+            if (checkpointNode) {
+                checkpointNode.remove();
+            }
+
+
+            document.querySelector('.main-modal')?.remove();
+
+            const goToDestinationBtn = document.querySelector('button:not(.skipBtn)');
+
+            if (goToDestinationBtn && goToDestinationBtn.textContent.trim() === 'Go To Destination') {
+                goToDestinationBtn.click();
+                clearInterval(interval);
+                return;
+            }
+            // -----------------------------------------------
+            repeatSelectors.forEach(sel => {
+                const btn = document.querySelector(sel);
+                if (btn) {
+                    btn.click();
+                }
+            });
+
+            const skipBtn = document.querySelector('button.skipBtn');
+            if (skipBtn && skipClickCount < 4) {
+                skipBtn.click();
+                skipClickCount++;
+            }
+
+            if (skipClickCount >= 4 && !accessIsolated) {
+                const accessBtn = document.querySelector('#access-offers.accessBtn');
+                if (accessBtn) {
+                    document.body.innerHTML = '';
+                    document.body.style.cssText = `
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        background: white;
+                    `;
+                    document.body.appendChild(accessBtn);
+                    accessBtn.style.cssText = `
+                        font-size: 1.25rem;
+                        padding: 1rem 2rem;
+                        border-radius: 8px;
+                        background-color: #10b981;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                    `;
+
+                    accessIsolated = true;
+                    clearInterval(interval);
+                }
+            }
+        }, 200);
+    }
+})();
